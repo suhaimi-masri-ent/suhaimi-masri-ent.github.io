@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Suhaimi Masri | Blog</title>
-  <meta name="description" content="Blog pribadi Suhaimi Masri — catatan, pengalaman, dan pemikiran tentang teknologi, desain, dan kehidupan digital.">
+  <title>Suhaimi Masri | Life & Knowledge Directory</title>
+  <meta name="description" content="A personal blog and directory focused on life, daily reflections, and branches of knowledge for the world and the hereafter.">
   <style>
     :root {
       --bg: #f5f0e8;
@@ -17,6 +17,7 @@
       --accent: #a86a3d;
       --accent-strong: #7b4d2e;
       --shadow: rgba(36, 26, 19, 0.08);
+      --highlight: #efe1d0;
     }
 
     * { box-sizing: border-box; }
@@ -29,21 +30,11 @@
       line-height: 1.7;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button, input { font: inherit; }
 
-    img {
-      max-width: 100%;
-      display: block;
-    }
-
-    .container {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
 
     .topbar {
       position: sticky;
@@ -87,39 +78,42 @@
       display: flex;
       align-items: center;
       gap: 24px;
+      flex-wrap: wrap;
       color: var(--muted);
       font-size: 0.95rem;
-      flex-wrap: wrap;
     }
 
-    .nav a:hover {
-      color: var(--ink);
-    }
+    .nav a:hover { color: var(--ink); }
 
-    .btn {
-      padding: 12px 18px;
+    .lang-toggle {
+      display: inline-flex;
+      padding: 4px;
       border-radius: 999px;
-      font-weight: 600;
-      transition: 0.2s ease;
-      display: inline-block;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.4);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.02);
     }
 
-    .btn-primary {
+    .lang-btn {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn.active {
       background: var(--ink);
       color: var(--paper);
     }
 
-    .btn-primary:hover {
-      background: var(--accent-strong);
-    }
-
-    .hero {
-      padding: 56px 0 32px;
-    }
-
+    .hero { padding: 56px 0 34px; }
     .hero-inner {
       display: grid;
-      grid-template-columns: 1.5fr 0.9fr;
+      grid-template-columns: 1.5fr 0.95fr;
       gap: 28px;
       align-items: center;
     }
@@ -136,19 +130,19 @@
     h1, h2, h3 {
       font-family: Georgia, "Times New Roman", serif;
       margin: 0;
-      line-height: 1.1;
+      line-height: 1.08;
       letter-spacing: -0.03em;
     }
 
     .hero h1 {
-      font-size: clamp(2.8rem, 5vw, 5rem);
-      max-width: 640px;
+      font-size: clamp(2.7rem, 4.8vw, 5rem);
+      max-width: 660px;
     }
 
     .hero p {
       color: var(--muted);
       font-size: 1.08rem;
-      max-width: 600px;
+      max-width: 620px;
       margin: 18px 0 0;
     }
 
@@ -158,6 +152,26 @@
       margin-top: 28px;
       flex-wrap: wrap;
     }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .btn-secondary {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.35);
+    }
+
+    .btn:hover { transform: translateY(-1px); }
 
     .hero-card {
       background: linear-gradient(180deg, #f4e9db 0%, #f8f5f1 100%);
@@ -195,9 +209,7 @@
       padding: 20px 20px 18px;
     }
 
-    .featured-copy .meta,
-    .post-meta,
-    .tag {
+    .meta, .tag {
       color: var(--muted);
       font-size: 0.78rem;
       letter-spacing: 0.08em;
@@ -215,11 +227,84 @@
       color: var(--muted);
     }
 
+    .directory-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      padding: 18px 0 26px;
+    }
+
+    .directory-card {
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.3);
+      overflow: hidden;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.02);
+    }
+
+    .directory-header {
+      padding: 22px 22px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,0.22);
+    }
+
+    .directory-header h3 {
+      font-size: clamp(1.7rem, 2vw, 2.4rem);
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 8px 10px;
+      background: rgba(168, 106, 61, 0.08);
+      color: var(--accent-strong);
+      border: 1px solid rgba(168, 106, 61, 0.14);
+      border-radius: 999px;
+    }
+
+    .directory-body {
+      padding: 18px 22px 20px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .directory-item {
+      display: grid;
+      gap: 8px;
+      padding: 16px 16px 14px;
+      border-radius: 16px;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+
+    .directory-item h4 {
+      margin: 0;
+      font-size: 1.28rem;
+      letter-spacing: -0.02em;
+    }
+
+    .directory-item p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .directory-item .meta {
+      color: var(--accent-strong);
+      letter-spacing: 0.1em;
+    }
+
     .main-grid {
       display: grid;
       grid-template-columns: minmax(0, 2fr) minmax(260px, 0.8fr);
       gap: 34px;
-      padding: 18px 0 64px;
+      padding: 12px 0 62px;
     }
 
     .section-title {
@@ -253,8 +338,7 @@
     .post-thumb {
       height: 170px;
       border-radius: 16px;
-      background: linear-gradient(135deg, rgba(122,82,54,0.12), rgba(190,146,109,0.16)),
-      linear-gradient(120deg, #e6dbc9, #f4efe8);
+      background: linear-gradient(135deg, rgba(122,82,54,0.12), rgba(190,146,109,0.16)), linear-gradient(120deg, #e6dbc9, #f4efe8);
       overflow: hidden;
     }
 
@@ -295,10 +379,7 @@
       padding: 20px;
     }
 
-    .widget h3 {
-      font-size: 1.5rem;
-      margin-bottom: 12px;
-    }
+    .widget h3 { font-size: 1.5rem; margin-bottom: 12px; }
 
     .profile {
       display: flex;
@@ -318,8 +399,7 @@
       font-weight: 700;
     }
 
-    .widget p,
-    .widget li {
+    .widget p, .widget li {
       color: var(--muted);
       margin: 0;
       line-height: 1.8;
@@ -348,8 +428,7 @@
       color: #f3eadf;
     }
 
-    .newsletter p,
-    .newsletter .tag {
+    .newsletter p, .newsletter .tag {
       color: rgba(243,234,223,0.8);
     }
 
@@ -400,14 +479,8 @@
     }
 
     @media (max-width: 900px) {
-      .hero-inner,
-      .main-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .post {
-        grid-template-columns: 1fr;
-      }
+      .hero-inner, .main-grid, .directory-grid { grid-template-columns: 1fr; }
+      .post { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 620px) {
@@ -416,23 +489,12 @@
         align-items: flex-start;
       }
 
-      .nav {
-        gap: 12px 18px;
-      }
-
-      .hero {
-        padding-top: 32px;
-      }
-
-      .hero-actions {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .btn {
-        width: 100%;
-        text-align: center;
-      }
+      .nav { gap: 12px 18px; }
+      .hero { padding-top: 32px; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .btn { width: 100%; text-align: center; }
+      .lang-toggle { width: 100%; justify-content: stretch; }
+      .lang-btn { flex: 1; }
     }
   </style>
 </head>
@@ -441,16 +503,22 @@
     <div class="topbar-inner">
       <div class="brand">
         <div class="brand-mark">S</div>
-        <span>Suhaimi Masri</span>
+        <span id="brandText">Suhaimi Masri</span>
       </div>
 
-      <nav class="nav" aria-label="Navigasi utama">
-        <a href="#home">Home</a>
-        <a href="#artikel">Artikel</a>
-        <a href="#tentang">Tentang</a>
-        <a href="#kategori">Kategori</a>
-        <a href="#kontak">Kontak</a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#home" data-i18n="navHome">Home</a>
+        <a href="#directory" data-i18n="navDirectory">Directory</a>
+        <a href="#life" data-i18n="navLife">Life</a>
+        <a href="#knowledge" data-i18n="navKnowledge">Knowledge</a>
+        <a href="#about" data-i18n="navAbout">About</a>
+        <a href="#contact" data-i18n="navContact">Contact</a>
       </nav>
+
+      <div class="lang-toggle" aria-label="Language selector">
+        <button class="lang-btn active" type="button" data-lang="en">EN</button>
+        <button class="lang-btn" type="button" data-lang="ja">日本語</button>
+      </div>
     </div>
   </header>
 
@@ -458,52 +526,102 @@
     <section class="hero container">
       <div class="hero-inner">
         <div>
-          <p class="eyebrow">Catatan & pengalaman</p>
-          <h1>Menulis tentang ide, kerja, dan perjalanan.</h1>
-          <p>
-            Blog pribadi yang berisi refleksi, pengalaman kerja, teknologi, serta pemikiran
-            ringan tentang kehidupan digital yang terus berkembang.
+          <p class="eyebrow" data-i18n="eyebrow">Notes & reflections</p>
+          <h1 id="heroTitle">Life, learning, and a meaningful path.</h1>
+          <p id="heroText">
+            A personal blog and directory for daily reflections, practical living, and the branches of knowledge that guide both the world and the hereafter.
           </p>
 
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#artikel">Baca artikel</a>
-            <a class="btn" href="#tentang" style="border:1px solid var(--line); background: rgba(255,255,255,0.35);">Tentang saya</a>
+            <a class="btn btn-primary" href="#directory" data-i18n="ctaPrimary">Explore directory</a>
+            <a class="btn btn-secondary" href="#about" data-i18n="ctaSecondary">About me</a>
           </div>
         </div>
 
-        <aside class="hero-card" aria-label="Artikel unggulan">
-          <span class="mini-label">Featured</span>
+        <aside class="hero-card" aria-label="Featured post">
+          <span class="mini-label" data-i18n="featuredLabel">Featured</span>
           <div class="featured-box">
             <div class="featured-thumb"></div>
             <div class="featured-copy">
-              <div class="meta">12 Oktober 2026 • 5 menit baca</div>
-              <h3>Memulai hari dengan fokus yang lebih jernih</h3>
-              <p>Bagaimana rutinitas kecil dapat mengubah cara kerja dan berpikir dalam jangka panjang.</p>
+              <div class="meta" data-i18n="featuredMeta">12 October 2026 • 5 min read</div>
+              <h3 id="featuredTitle">Building a calmer and clearer daily rhythm</h3>
+              <p id="featuredText">
+                Small habits, regular thinking, and sincere intention can shape a more grounded and intentional life.
+              </p>
             </div>
           </div>
         </aside>
       </div>
     </section>
 
+    <section id="directory" class="container">
+      <div class="directory-grid">
+        <article class="directory-card">
+          <div class="directory-header">
+            <h3 data-i18n="lifeTitle">Life</h3>
+            <span class="badge" data-i18n="lifeBadge">Daily</span>
+          </div>
+          <div class="directory-body">
+            <div class="directory-item">
+              <div class="meta" data-i18n="lifeMeta1">Wellbeing</div>
+              <h4 data-i18n="lifeEntryTitle1">Morning routines that bring clarity</h4>
+              <p data-i18n="lifeEntryText1">Habits that help the mind settle, focus, and move with intention through the day.</p>
+            </div>
+            <div class="directory-item">
+              <div class="meta" data-i18n="lifeMeta2">Relationships</div>
+              <h4 data-i18n="lifeEntryTitle2">Family, connection, and presence</h4>
+              <p data-i18n="lifeEntryText2">Meaningful ties are built through regular attention, empathy, and sincere care.</p>
+            </div>
+            <div class="directory-item">
+              <div class="meta" data-i18n="lifeMeta3">Mindset</div>
+              <h4 data-i18n="lifeEntryTitle3">Digital minimalism for a calmer mind</h4>
+              <p data-i18n="lifeEntryText3">Reducing noise can lead to better focus, improved attention, and healthier routines.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="directory-card">
+          <div class="directory-header">
+            <h3 data-i18n="knowledgeTitle">Knowledge</h3>
+            <span class="badge" data-i18n="knowledgeBadge">World & Hereafter</span>
+          </div>
+          <div class="directory-body">
+            <div class="directory-item">
+              <div class="meta" data-i18n="knowledgeMeta1">World</div>
+              <h4 data-i18n="knowledgeEntryTitle1">Learning with direction and purpose</h4>
+              <p data-i18n="knowledgeEntryText1">Structured learning and thoughtful practice help us grow with clarity and consistency.</p>
+            </div>
+            <div class="directory-item">
+              <div class="meta" data-i18n="knowledgeMeta2">Hereafter</div>
+              <h4 data-i18n="knowledgeEntryTitle2">A simple path to spiritual reflection</h4>
+              <p data-i18n="knowledgeEntryText2">Daily remembrance, humility, and sincere worship bring meaning to every act of life.</p>
+            </div>
+            <div class="directory-item">
+              <div class="meta" data-i18n="knowledgeMeta3">Balance</div>
+              <h4 data-i18n="knowledgeEntryTitle3">Knowledge that shapes action</h4>
+              <p data-i18n="knowledgeEntryText3">True understanding must lead to values, discipline, and good conduct in practice.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <div class="container main-grid">
-      <section id="artikel" aria-label="Daftar artikel">
+      <section aria-label="Latest articles">
         <div class="section-title">
-          <h2>Artikel terbaru</h2>
+          <h2 data-i18n="latestTitle">Latest articles</h2>
         </div>
 
         <div class="posts">
           <article class="post">
             <div class="post-thumb" aria-hidden="true"></div>
             <div class="post-content">
-              <div class="post-meta">Teknologi • 8 menit baca</div>
-              <h3>Menjaga konsistensi dalam belajar teknologi baru</h3>
-              <p>
-                Belajar hal baru tidak harus ekstrem. Kadang yang paling efektif adalah membangun kebiasaan
-                kecil yang bisa dipertahankan secara konsisten dalam waktu lama.
-              </p>
+              <div class="meta" data-i18n="postMeta1">Technology • 8 min read</div>
+              <h3 data-i18n="postTitle1">Building consistency in learning new skills</h3>
+              <p data-i18n="postText1">Progress does not require dramatic bursts of effort; it often emerges from small habits practiced with patience and intention.</p>
               <div class="post-footer">
-                <span class="tag">Productivity</span>
-                <a href="#" class="read-more">Baca selengkapnya →</a>
+                <span class="tag" data-i18n="tag1">Productivity</span>
+                <a href="#" class="read-more" data-i18n="readMore">Read more →</a>
               </div>
             </div>
           </article>
@@ -511,15 +629,12 @@
           <article class="post">
             <div class="post-thumb" style="background:linear-gradient(135deg, rgba(116,121,133,0.12), rgba(158,175,192,0.2)),linear-gradient(120deg, #dfe0e1, #f1f3f5);" aria-hidden="true"></div>
             <div class="post-content">
-              <div class="post-meta">Desain • 6 menit baca</div>
-              <h3>Kenapa visual yang sederhana sering lebih berkesan</h3>
-              <p>
-                Desain yang bagus tidak selalu rumit. Dalam banyak kasus, kesederhanaan justru membantu pesan
-                lebih cepat dipahami dan lebih mudah diingat.
-              </p>
+              <div class="meta" data-i18n="postMeta2">Design • 6 min read</div>
+              <h3 data-i18n="postTitle2">Why simple design often leaves a deeper impression</h3>
+              <p data-i18n="postText2">Clarity in communication and composition often matters more than complexity. Simplicity can make ideas feel more trustworthy and memorable.</p>
               <div class="post-footer">
-                <span class="tag">Design</span>
-                <a href="#" class="read-more">Baca selengkapnya →</a>
+                <span class="tag" data-i18n="tag2">Design</span>
+                <a href="#" class="read-more" data-i18n="readMore">Read more →</a>
               </div>
             </div>
           </article>
@@ -527,53 +642,50 @@
           <article class="post">
             <div class="post-thumb" style="background:linear-gradient(135deg, rgba(119,94,66,0.12), rgba(183,150,119,0.2)),linear-gradient(120deg, #e8d8c0, #f4eee7);" aria-hidden="true"></div>
             <div class="post-content">
-              <div class="post-meta">Life • 4 menit baca</div>
-              <h3>Menulis sebagai cara untuk melihat diri sendiri lebih jujur</h3>
-              <p>
-                Menulis membantu menyusun pikiran yang berantakan menjadi sesuatu yang lebih jelas. Ia bukan hanya
-                sarana ekspresi, tetapi juga alat introspeksi.
-              </p>
+              <div class="meta" data-i18n="postMeta3">Life • 4 min read</div>
+              <h3 data-i18n="postTitle3">Writing as a way to understand ourselves more honestly</h3>
+              <p data-i18n="postText3">Writing helps us turn noisy thoughts into clearer meaning. It is not only expression, but reflection and self-understanding.</p>
               <div class="post-footer">
-                <span class="tag">Reflection</span>
-                <a href="#" class="read-more">Baca selengkapnya →</a>
+                <span class="tag" data-i18n="tag3">Reflection</span>
+                <a href="#" class="read-more" data-i18n="readMore">Read more →</a>
               </div>
             </div>
           </article>
         </div>
       </section>
 
-      <aside class="sidebar">
-        <div class="widget" id="tentang">
+      <aside class="sidebar" id="about">
+        <div class="widget">
           <div class="profile">
             <div class="avatar">SM</div>
             <div>
-              <h3>Suhaimi Masri</h3>
-              <div class="tag">Writer • Designer • Builder</div>
+              <h3 data-i18n="aboutName">Suhaimi Masri</h3>
+              <div class="tag" data-i18n="aboutRole">Writer • Designer • Builder</div>
             </div>
           </div>
-          <p>
-            Saya menulis tentang pengalaman kerja, pembelajaran teknologi, serta proses membangun hidup yang lebih bermakna.
+          <p data-i18n="aboutText">
+            I write about everyday life, practical learning, and the search for a life guided by both depth and purpose.
           </p>
         </div>
 
-        <div class="widget" id="kategori">
-          <h3>Kategori</h3>
+        <div class="widget">
+          <h3 data-i18n="categoriesTitle">Categories</h3>
           <ul>
-            <li>Teknologi</li>
-            <li>Desain</li>
-            <li>Produktivitas</li>
-            <li>Refleksi</li>
-            <li>Life & Growth</li>
+            <li data-i18n="cat1">Technology</li>
+            <li data-i18n="cat2">Design</li>
+            <li data-i18n="cat3">Productivity</li>
+            <li data-i18n="cat4">Iman</li>
+            <li data-i18n="cat5">Life & Growth</li>
           </ul>
         </div>
 
-        <div class="widget newsletter" id="kontak">
-          <span class="tag">Newsletter</span>
-          <h3>Ikuti update terbaru</h3>
-          <p>Catatan singkat, insight baru, dan artikel yang mungkin menarik untuk dibaca.</p>
+        <div class="widget newsletter" id="contact">
+          <span class="tag" data-i18n="newsletterTag">Newsletter</span>
+          <h3 data-i18n="newsletterTitle">Stay updated</h3>
+          <p data-i18n="newsletterText">Short notes, new ideas, and writing that may be worth your time.</p>
           <form>
-            <input type="email" aria-label="Email" placeholder="Email Anda">
-            <button type="submit">Daftar</button>
+            <input type="email" aria-label="Email" placeholder="Email address" data-i18n-placeholder="emailPlaceholder">
+            <button type="submit" data-i18n="newsletterButton">Join</button>
           </form>
         </div>
       </aside>
@@ -583,12 +695,185 @@
   <footer>
     <div class="container footer-inner">
       <div>© <span id="year"></span> Suhaimi Masri</div>
-      <div>Blog pribadi • Built with GitHub Pages</div>
+      <div data-i18n="footerText">Personal blog • Built with GitHub Pages</div>
     </div>
   </footer>
 
   <script>
+    const i18n = {
+      en: {
+        brandText: 'Suhaimi Masri',
+        navHome: 'Home',
+        navDirectory: 'Directory',
+        navLife: 'Life',
+        navKnowledge: 'Knowledge',
+        navAbout: 'About',
+        navContact: 'Contact',
+        eyebrow: 'Notes & reflections',
+        heroTitle: 'Life, learning, and a meaningful path.',
+        heroText: 'A personal blog and directory for daily reflections, practical living, and the branches of knowledge that guide both the world and the hereafter.',
+        ctaPrimary: 'Explore directory',
+        ctaSecondary: 'About me',
+        featuredLabel: 'Featured',
+        featuredMeta: '12 October 2026 • 5 min read',
+        featuredTitle: 'Building a calmer and clearer daily rhythm',
+        featuredText: 'Small habits, regular thinking, and sincere intention can shape a more grounded and intentional life.',
+        lifeTitle: 'Life',
+        lifeBadge: 'Daily',
+        lifeMeta1: 'Wellbeing',
+        lifeEntryTitle1: 'Morning routines that bring clarity',
+        lifeEntryText1: 'Habits that help the mind settle, focus, and move with intention through the day.',
+        lifeMeta2: 'Relationships',
+        lifeEntryTitle2: 'Family, connection, and presence',
+        lifeEntryText2: 'Meaningful ties are built through regular attention, empathy, and sincere care.',
+        lifeMeta3: 'Mindset',
+        lifeEntryTitle3: 'Digital minimalism for a calmer mind',
+        lifeEntryText3: 'Reducing noise can lead to better focus, improved attention, and healthier routines.',
+        knowledgeTitle: 'Knowledge',
+        knowledgeBadge: 'World & Hereafter',
+        knowledgeMeta1: 'World',
+        knowledgeEntryTitle1: 'Learning with direction and purpose',
+        knowledgeEntryText1: 'Structured learning and thoughtful practice help us grow with clarity and consistency.',
+        knowledgeMeta2: 'Hereafter',
+        knowledgeEntryTitle2: 'A simple path to spiritual reflection',
+        knowledgeEntryText2: 'Daily remembrance, humility, and sincere worship bring meaning to every act of life.',
+        knowledgeMeta3: 'Balance',
+        knowledgeEntryTitle3: 'Knowledge that shapes action',
+        knowledgeEntryText3: 'True understanding must lead to values, discipline, and good conduct in practice.',
+        latestTitle: 'Latest articles',
+        postMeta1: 'Technology • 8 min read',
+        postTitle1: 'Building consistency in learning new skills',
+        postText1: 'Progress does not require dramatic bursts of effort; it often emerges from small habits practiced with patience and intention.',
+        tag1: 'Productivity',
+        postMeta2: 'Design • 6 min read',
+        postTitle2: 'Why simple design often leaves a deeper impression',
+        postText2: 'Clarity in communication and composition often matters more than complexity. Simplicity can make ideas feel more trustworthy and memorable.',
+        tag2: 'Design',
+        postMeta3: 'Life • 4 min read',
+        postTitle3: 'Writing as a way to understand ourselves more honestly',
+        postText3: 'Writing helps us turn noisy thoughts into clearer meaning. It is not only expression, but reflection and self-understanding.',
+        tag3: 'Reflection',
+        readMore: 'Read more →',
+        aboutName: 'Suhaimi Masri',
+        aboutRole: 'Writer • Designer • Builder',
+        aboutText: 'I write about everyday life, practical learning, and the search for a life guided by both depth and purpose.',
+        categoriesTitle: 'Categories',
+        cat1: 'Technology',
+        cat2: 'Design',
+        cat3: 'Productivity',
+        cat4: 'Iman',
+        cat5: 'Life & Growth',
+        newsletterTag: 'Newsletter',
+        newsletterTitle: 'Stay updated',
+        newsletterText: 'Short notes, new ideas, and writing that may be worth your time.',
+        emailPlaceholder: 'Email address',
+        newsletterButton: 'Join',
+        footerText: 'Personal blog • Built with GitHub Pages'
+      },
+      ja: {
+        brandText: 'スハイミ・マスリ',
+        navHome: 'ホーム',
+        navDirectory: 'ディレクトリ',
+        navLife: '人生',
+        navKnowledge: '知識',
+        navAbout: '自己紹介',
+        navContact: '連絡先',
+        eyebrow: 'メモと振り返り',
+        heroTitle: '人生、学び、そして意味ある道。',
+        heroText: '日々の省察、実践的な暮らし、そしてこの世とあの世を導く知の分野を扱う個人ブログとディレクトリです。',
+        ctaPrimary: 'ディレクトリを見る',
+        ctaSecondary: 'プロフィール',
+        featuredLabel: '特集',
+        featuredMeta: '2026年10月12日 • 5分で読める',
+        featuredTitle: '落ち着いて明確な1日を作る',
+        featuredText: '小さな習慣、日々の考え、誠実な意志が、より穏やかで意識的な人生を形づくります。',
+        lifeTitle: '人生',
+        lifeBadge: '日常',
+        lifeMeta1: '健康',
+        lifeEntryTitle1: '頭を静かに整える朝の習慣',
+        lifeEntryText1: '心を落ち着かせ、集中し、意識を持って一日を進める習慣です。',
+        lifeMeta2: '人間関係',
+        lifeEntryTitle2: '家族とつながり、在ることの大切さ',
+        lifeEntryText2: '真剣な関心と共感、誠実な配慮が、意味あるつながりを育みます。',
+        lifeMeta3: '考え方',
+        lifeEntryTitle3: '心を落ち着かせるデジタルミニマリズム',
+        lifeEntryText3: 'ノイズを減らすことで、集中力、注意力、健康的な習慣を取り戻せます。',
+        knowledgeTitle: '知識',
+        knowledgeBadge: '現世と来世',
+        knowledgeMeta1: '現世',
+        knowledgeEntryTitle1: '方向性と目的を持った学び',
+        knowledgeEntryText1: '構造化された学びと丁寧な実践は、明確さと一貫性を持って成長を支えます。',
+        knowledgeMeta2: '来世',
+        knowledgeEntryTitle2: '霊的な省察へのシンプルな道',
+        knowledgeEntryText2: '日々の記憶、謙虚さ、誠実な礼拝は、人生のあらゆる行いに意味を与えます。',
+        knowledgeMeta3: 'バランス',
+        knowledgeEntryTitle3: '行動へと変わる知識',
+        knowledgeEntryText3: '真の理解は、価値観・規律・良い実践へとつながる必要があります。',
+        latestTitle: '最新記事',
+        postMeta1: 'テクノロジー • 8分で読める',
+        postTitle1: '新しいスキルを学ぶための一貫性',
+        postText1: '進歩は大きな爆発ではなく、忍耐と意志を持って継続される小さな習慣から生まれます。',
+        tag1: '生産性',
+        postMeta2: 'デザイン • 6分で読める',
+        postTitle2: 'シンプルなデザインが深く印象に残る理由',
+        postText2: '伝達と構成の明瞭さは、複雑さよりも重要な場合が多く、シンプルさは信頼感と記憶に残りやすくなります。',
+        tag2: 'デザイン',
+        postMeta3: '人生 • 4分で読める',
+        postTitle3: '自分をより正直に理解するための文章',
+        postText3: '書くことは、雑然とした思考をより明確な意味へと変えます。それは表現だけでなく、内省と自己理解でもあります。',
+        tag3: '内省',
+        readMore: '続きを読む →',
+        aboutName: 'スハイミ・マスリ',
+        aboutRole: 'ライター • デザイナー • ビルダー',
+        aboutText: '私は日常生活、実践的な学び、深さと目的を持つ人生を探求することについて書いています。',
+        categoriesTitle: 'カテゴリー',
+        cat1: 'テクノロジー',
+        cat2: 'デザイン',
+        cat3: '生産性',
+        cat4: '信仰',
+        cat5: '人生と成長',
+        newsletterTag: 'ニュースレター',
+        newsletterTitle: '更新を受け取る',
+        newsletterText: '短いメモ、新しいアイデア、価値のある文章をお届けします。',
+        emailPlaceholder: 'メールアドレス',
+        newsletterButton: '参加',
+        footerText: '個人ブログ • GitHub Pagesで構築'
+      }
+    };
+
+    const elements = document.querySelectorAll('[data-i18n]');
+    const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
+    const buttons = document.querySelectorAll('.lang-btn');
+
+    function applyLanguage(lang) {
+      const dict = i18n[lang];
+      if (!dict) return;
+
+      document.documentElement.lang = lang === 'ja' ? 'ja' : 'en';
+
+      elements.forEach((el) => {
+        const key = el.dataset.i18n;
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+
+      placeholders.forEach((el) => {
+        const key = el.dataset.i18nPlaceholder;
+        if (dict[key]) el.setAttribute('placeholder', dict[key]);
+      });
+
+      buttons.forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+    });
+
     document.getElementById('year').textContent = new Date().getFullYear();
+    applyLanguage('en');
   </script>
 </body>
 </html>
