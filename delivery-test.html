@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JuhudManager Delivery Test</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:500px;margin:35px auto;padding:20px}
+input,select,button{box-sizing:border-box;width:100%;padding:13px;margin:8px 0}
+button{background:#1769aa;color:white;border:0;border-radius:6px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eee;padding:12px}
+</style>
+</head>
+<body>
+<h2>JuhudManager Delivery Test</h2>
+
+<label>Delivery channel</label>
+<select id="channel">
+<option value="EMAIL">Email (Resend)</option>
+<option value="WHATSAPP">WhatsApp (Meta)</option>
+</select>
+
+<label>Delivery Test Secret</label>
+<input id="secret" type="password" autocomplete="off"
+placeholder="Enter test secret">
+
+<button id="send">Send Test OTP</button>
+
+<h3>Result</h3>
+<pre id="result">Ready.</pre>
+
+<script>
+const API = "https://juhudmanager-v2-api.bitsuhami.workers.dev";
+
+document.getElementById("send").onclick = async () => {
+  const button = document.getElementById("send");
+  const result = document.getElementById("result");
+  const secret = document.getElementById("secret").value;
+  const channel = document.getElementById("channel").value;
+
+  if (!secret) {
+    result.textContent = "Please enter the test secret.";
+    return;
+  }
+
+  button.disabled = true;
+  result.textContent = "Sending test...";
+
+  try {
+    const response = await fetch(API + "/__delivery-test", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + secret
+      },
+      body: JSON.stringify({channel})
+    });
+
+    const data = await response.json();
+
+    result.textContent =
+      "HTTP " + response.status + "\n" +
+      JSON.stringify(data, null, 2);
+
+  } catch (error) {
+    result.textContent = "Network/CORS error: " + error.message;
+  } finally {
+    button.disabled = false;
+  }
+};
+</script>
+</body>
+</html>
