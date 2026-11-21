@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JuhudManager V2 - Registration Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 680px;
+      margin: 24px auto;
+      padding: 16px;
+      line-height: 1.5;
+      color: #222;
+    }
+    label { display:block; margin-top:12px; font-weight:bold; }
+    input, button {
+      box-sizing:border-box;
+      width:100%;
+      padding:11px;
+      margin-top:5px;
+      font-size:16px;
+    }
+    button { cursor:pointer; margin-top:16px; }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    pre {
+      white-space:pre-wrap;
+      overflow-wrap:anywhere;
+      background:#eee;
+      color:#111;
+      padding:14px;
+      border-radius:8px;
+    }
+    .note { background:#fff4d6; padding:12px; border-radius:6px; }
+    .section { border-top:1px solid #ccc; margin-top:24px; padding-top:12px; }
+  </style>
+</head>
+<body>
+  <h2>JuhudManager V2 Registration Test</h2>
+
+  <p class="note">
+    Testing only. Use fictional test identity details.
+    Do not use another person's National ID.
+    Registration creates a DISABLED account with temporary
+    identity reservations lasting 15 minutes.
+  </p>
+
+  <div>
+    <h3>1. Registration</h3>
+
+    <label>Full name</label>
+    <input id="fullName" maxlength="150" placeholder="Test User">
+
+    <label>Issuing country code</label>
+    <input id="countryCode" maxlength="2" value="MY">
+
+    <label>National ID (test value only)</label>
+    <input id="nationalId" placeholder="TEST-REG-001">
+
+    <label>Email address</label>
+    <input id="email" type="email" placeholder="your-resend-account-email@example.com">
+
+    <label>WhatsApp number (E.164 format)</label>
+    <input id="whatsapp" placeholder="+60123456789">
+
+    <button id="registerBtn">Create Test Registration</button>
+  </div>
+
+  <div class="section">
+    <h3>2. Email OTP</h3>
+    <button id="requestBtn" disabled>Request Email OTP</button>
+
+    <label>Six-digit OTP</label>
+    <input id="otp" inputmode="numeric" maxlength="6" placeholder="123456">
+
+    <button id="verifyBtn" disabled>Verify Email OTP</button>
+  </div>
+
+  <div class="section">
+    <h3>Result</h3>
+    <pre id="result">Ready. No request has been sent.</pre>
+  </div>
+
+<script>
+(() => {
+  const API = "https://juhudmanager-v2-api.bitsuhami.workers.dev";
+
+  const $ = id => document.getElementById(id);
+  const output = $("result");
+
+  let registration = null;
+  let busy = false;
+
+  function show(value) {
+    output.textContent = typeof value === "string"
+      ? value
+      : JSON.stringify(value, null, 2);
+  }
+
+  async function post(path, payload) {
+    const response = await fetch(API + path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const raw = await response.text();
+    let data;
+
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      data = { response: raw };
+    }
+
+    return { status: response.status, data };
+  }
+
+  function setBusy(value) {
+    busy = value;
+    ["registerBtn", "requestBtn", "verifyBtn"].forEach(id => {
+      $(id).disabled = value ||
+        (id === "requestBtn" && !registration) ||
+        (id === "verifyBtn" && !registration);
+    });
+  }
+
+  $("registerBtn").addEventListener("click", async () => {
+    if (busy) return;
+
+    const payload = {
+      fullName: $("fullName").value.trim(),
+      countryCode: $("countryCode").value.trim().toUpperCase(),
+      nationalId: $("nationalId").value.trim(),
+      email: $("email").value.trim(),
+      whatsapp: $("whatsapp").value.trim()
+    };
+
+    if (Object.values(payload).some(value => !value)) {
+      show("Please complete all registration fields.");
+      return;
+    }
+
+    setBusy(true);
+    show("Creating provisional registration...");
+
+    try {
+      const result = await post("/auth/register/start", payload);
+
+      show({
+        endpoint: "POST /auth/register/start",
+        httpStatus: result.status,
+        response: result.data
+      });
+
+      if (result.status === 201 && result.data.ok) {
+        registration = {
+          userId: result.data.userId,
+          emailIdentityId: result.data.identities?.email?.identityId,
+          email: payload.email
+        };
+
+        if (!registration.emailIdentityId) {
+          registration = null;
+          show("Registration response did not include the email identity ID.");
+          return;
+        }
+
+        $("requestBtn").disabled = false;
+        show({
+          result: "REGISTRATION CREATED",
+          accountStatus: result.data.accountStatus,
+          reservationMinutes: result.data.reservationMinutes,
+          identities: result.data.identities,
+          nextStep: "Request email OTP"
+        });
+      }
+    } catch (error) {
+      show("Network or browser error: " + error.message);
+    } finally {
+      setBusy(false);
+    }
+  });
+
+  $("requestBtn").addEventListener("click", async () => {
+    if (busy || !registration) return;
+
+    setBusy(true);
+    show("Requesting email OTP...");
+
+    try {
+      const result = await post("/auth/otp/request", {
+        userId: registration.userId,
+        identityId: registration.emailIdentityId,
+        destinationType: "EMAIL",
+        destination: registration.email
+      });
+
+      show({
+        endpoint: "POST /auth/otp/request",
+        httpStatus: result.status,
+        response: result.data
+      });
+
+      if (result.status === 202 && result.data.ok) {
+        $("verifyBtn").disabled = false;
+        show({
+          result: "OTP REQUEST ACCEPTED",
+          destinationType: result.data.destinationType,
+          expiresAt: result.data.expiresAt,
+          resendAfterSeconds: result.data.resendAfterSeconds,
+          message: "Check your email inbox and spam folder."
+        });
+      }
+    } catch (error) {
+      show("Network or browser error: " + error.message);
+    } finally {
+      setBusy(false);
+    }
+  });
+
+  $("verifyBtn").addEventListener("click", async () => {
+    if (busy || !registration) return;
+
+    const otp = $("otp").value.trim();
+
+    if (!/^\d{6}$/.test(otp)) {
+      show("Enter the six-digit OTP.");
+      return;
+    }
+
+    setBusy(true);
+    show("Verifying email OTP...");
+
+    try {
+      const result = await post("/auth/otp/verify", {
+        userId: registration.userId,
+        identityId: registration.emailIdentityId,
+        destinationType: "EMAIL",
+        destination: registration.email,
+        otp
+      });
+
+      show({
+        endpoint: "POST /auth/otp/verify",
+        httpStatus: result.status,
+        response: result.data
+      });
+
+      if (result.status === 200 && result.data.verified) {
+        show({
+          result: "EMAIL OTP VERIFIED",
+          identityStatus: result.data.identityStatus,
+          emailUpdated: result.data.emailUpdated,
+          note: "Account remains DISABLED. WhatsApp and National ID verification are still required."
+        });
+      }
+    } catch (error) {
+      show("Network or browser error: " + error.message);
+    } finally {
+      setBusy(false);
+    }
+  });
+})();
+</script>
+</body>
+</html>
